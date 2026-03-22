@@ -50,7 +50,9 @@ import java.util.Scanner;
 public class Exercicio03 {
 
 	public static void main(String[] args) {
-		
+
+		int duracao = 0;
+
 		System.out.println("Informe um a hora inicial: ");
 		Scanner sc = new Scanner(System.in);
 		int ini = sc.nextInt();
@@ -58,15 +60,17 @@ public class Exercicio03 {
 		System.out.println("Informe a hora final: ");
 		int fim = sc.nextInt();
 		
-		int temp = ini+fim;
-		
-		if ((ini || fim)>12)
-			
-		
-		
-		
-		sc.close();
+        if (fim > ini) {
+            duracao = fim - ini;
+        } 
+        if (fim < ini) {
+            duracao = 24 - ini + fim;
+        } else {
+            duracao = 24;
+        }
 
+        System.out.println("O jogo durou " + duracao + " hora(s).");
+		sc.close();
 	}
 
 }
