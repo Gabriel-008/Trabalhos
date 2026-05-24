@@ -1,0 +1,47 @@
+#include "ArvoreB.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct _Endereco Endereco;
+struct _Endereco
+{
+	char logradouro[72];
+	char bairro[72];
+	char cidade[72];
+	char uf[72];
+	char sigla[2];
+	char cep[8];
+	char lixo[2];
+};
+
+int main(){
+    FILE* f = fopen("arquivo1.dat", "rb");
+    FILE* fOut = fopen("arquivoFinal.dat", "wb");
+    ArvoreB* arvore = ArvoreB_Abre("indice.dat");
+    Endereco e;
+
+    long leu = fread(&e, sizeof(Endereco), 1, f);
+    long escritos = 0;
+    long lidos = 0;
+
+    while(leu){
+
+        long busca = ArvoreB_Busca(arvore, e.cep);
+        if(busca != -1){
+            fwrite(&e, sizeof(Endereco), 1, fOut);
+            escritos++;
+        }
+        leu = fread(&e, sizeof(Endereco), 1, f);
+        lidos++;
+    }
+
+    printf("\nNumero de registros lidos: %d", lidos);
+    printf("\nNumero de registros gravados: %d", escritos);
+
+    fclose(f);
+    fclose(fOut);
+    ArvoreB_Fecha(arvore);
+
+    return 0;
+}
