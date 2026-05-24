@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+typedef struct _Endereco Endereco;
+struct _Endereco
+{
+	char logradouro[72];
+	char bairro[72];
+	char cidade[72];
+	char uf[72];
+	char sigla[2];
+	char cep[8];
+	char lixo[2];
+};
+
+int main(){
+
+FILE* f1 = fopen("cep.dat", "rb");
+FILE* arq1 = fopen("arquivo1.dat", "wb");
+Endereco e;
+
+srand(time(NULL));
+int entra = 0;
+long total = 0;
+
+long leu = fread(&e, sizeof(Endereco), 1, f1);
+while(leu){
+    float random_num = 1.0*rand()/RAND_MAX;
+        if(random_num < 0.8) {
+            fwrite(&e, sizeof(Endereco), 1, arq1);
+            entra++;
+        }
+        leu = fread(&e, sizeof(Endereco), 1, f1);
+        total++;
+}
+    double perc = (100*entra)/total;
+    printf("\nTotal de registros no arquivo de saida: %d",entra);
+    printf("\nPercentual de registros no arquivo de saida: %.2f%%\n",perc);
+    fclose(f1);
+    fclose(arq1);
+    return 0;
+}
