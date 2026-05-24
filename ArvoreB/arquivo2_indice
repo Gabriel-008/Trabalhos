@@ -24,10 +24,7 @@ int main(){
     long leu = fread(&e, sizeof(Endereco), 1, f2);
 
     while(leu){
-
         ArvoreB_Insere(arvore, e.cep, pos);
-        
-        printf("[%.8s]\n", e.cep);
         pos++;
         leu = fread(&e, sizeof(Endereco), 1, f2);
     }
