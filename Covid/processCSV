@@ -30,12 +30,6 @@ int encontrarContinente(char* name) {
 void callback(char** cols, int ncols, void* userData) {
     ContinentData* continents = (ContinentData*) userData;
  
-    /*
-        cols[1] = continent
-        cols[5] = new_cases
-        cols[8] = new_deaths
-    */
- 
     if (ncols <= 8)
         return;
  
@@ -61,23 +55,27 @@ int main() {
     CSVParser_init(&csv);
  
     FILE* f = fopen("./owid-covid-data.csv", "rb");
-    if (f) {
+
+    if (f==NULL) {
+        fprintf(stderr, "\nErro, o arquivo não pôde ser aberto");
+        free(buff);
+        return 1;
+     }
         int leu = fread(buf, 1, READ_BUF_SIZE, f);
         while (leu > 0) {
             CSVParser_processLines(&csv, buf, leu, callback, continents);
             leu = fread(buf, 1, READ_BUF_SIZE, f);
         }
-        }else{
-            fprintf(stderr, "\nErro, o arquivo não pôde ser aberto");
-            return 1;
-        } 
         fclose(f);
         CSVParser_processLines(&csv, "\n", 1, callback, continents);
- 
-        printf("\n Casos e mortes por continente pela covid-19\n");
-        for (int i = 0; i < NUM_CONTINENTES; i++) {
-            printf("%s\nCasos: %.0f\nMortes: %.0f\n\n",continents[i].continent, continents[i].userData[0],continents[i].userData[1]);
+
+        int ind = encontrarContinente("South America");
+        if(ind != -1){
+           printf("\n Casos e mortes na América do Sul por covid-19\n");
+           printf("Casos: %.0f\n", continents[i].userData[0]);
+           printf("Mortes: %.0f\n, continents[i].userData[1]);
         }
  
     free(buf);
     return 0;
+}
